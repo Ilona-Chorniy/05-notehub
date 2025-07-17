@@ -7,9 +7,9 @@ import Modal from "../Modal/Modal";
 import NoteForm from "../NoteForm/NoteForm";
 import Pagination from "../Pagination/Pagination";
 import SearchBox from "../SearchBox/SearchBox";
-import { fetchNotes, createNote, deleteNote } from "../services/noteService";
-import type { Note } from "../types/note";
-import type { FetchNotesResponse, CreateNoteData } from "../services/noteService";
+import { fetchNotes, createNote, deleteNote } from "../../services/noteService";
+import type { Note } from "../../types/note";
+import type { FetchNotesResponse, CreateNoteData } from "../../services/noteService";
 
 const App: React.FC = () => {
   const [page, setPage] = useState(1);
