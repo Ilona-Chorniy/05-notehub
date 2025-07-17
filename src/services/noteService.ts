@@ -21,9 +21,9 @@ export interface CreateNoteData {
 const BASE_URL = 'https://notehub-public.goit.study/api';
 const TOKEN = import.meta.env.VITE_NOTEHUB_TOKEN;
 
-if (!TOKEN) {
-    console.warn('VITE_NOTEHUB_TOKEN is not set! API requests may fail.');
-}
+// if (!TOKEN) {
+//     console.warn('VITE_NOTEHUB_TOKEN is not set! API requests may fail.');
+// }
 
 export async function fetchNotes(params: FetchNotesParams = {}): Promise<FetchNotesResponse> {
     try {
@@ -78,6 +78,3 @@ export async function deleteNote(id: number): Promise<Note> {
         throw error;
     }
 }
-
-
-

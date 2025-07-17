@@ -7,7 +7,7 @@ interface ModalProps {
   children: React.ReactNode;
 }
 
-const modalRoot = document.getElementById("modal-root")!;
+const modalRoot = document.getElementById("modal-root");
 const Modal: React.FC<ModalProps> = ({ onClose, children }) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -28,6 +28,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, children }) => {
     }
   };
 
+  if (!modalRoot) return null;
   return createPortal(
     <div
       className={css.backdrop}

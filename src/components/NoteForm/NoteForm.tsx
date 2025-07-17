@@ -1,12 +1,12 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import css from "./NoteForm.module.css";
-import type { CreateNoteData} from "../../services/noteService"
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createNote, type CreateNoteData } from "../../services/noteService";
 import type { NoteTag } from "../../types/note";
 
 interface NoteFormProps {
-  onSubmit: (note: CreateNoteData) => void;
-  isLoading: boolean;
+  isLoading?: boolean; 
   onCancel: () => void;
 }
 
@@ -27,14 +27,26 @@ const initialValues: CreateNoteData = {
   tag: "Todo",
 };
 
-const NoteForm: React.FC<NoteFormProps> = ({ onSubmit, isLoading, onCancel }) => {
+const NoteForm: React.FC<NoteFormProps> = ({ onCancel }) => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: createNote,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
+    },
+  });
+
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={(values, { resetForm }) => {
-        onSubmit(values);
-        resetForm();
+        mutation.mutate(values, {
+          onSuccess: () => {
+            resetForm();
+            onCancel(); 
+          },
+        });
       }}
     >
       <Form className={css.form}>
@@ -77,17 +89,17 @@ const NoteForm: React.FC<NoteFormProps> = ({ onSubmit, isLoading, onCancel }) =>
           <button
             type="button"
             onClick={onCancel}
-            disabled={isLoading}
+            disabled={mutation.status === "pending"}
             className={css.cancelButton}
           >
             Cancel
           </button>
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={mutation.status === "pending"}
             className={css.submitButton}
           >
-            {isLoading ? "Creating..." : "Create note"}
+            {mutation.status === "pending" ? "Creating..." : "Create note"}
           </button>
         </div>
       </Form>
