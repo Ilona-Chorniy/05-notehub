@@ -9,6 +9,11 @@ import Pagination from "../Pagination/Pagination";
 import SearchBox from "../SearchBox/SearchBox";
 import { fetchNotes } from "../../services/noteService";
 import type { FetchNotesResponse } from "../../services/noteService";
+import { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
+
+
+const PER_PAGE = 12;
 
 const App: React.FC = () => {
   const [page, setPage] = useState(1);
@@ -23,8 +28,8 @@ const App: React.FC = () => {
     isError,
     error,
   } = useQuery<FetchNotesResponse | null, Error>({
-    queryKey: ["notes", page, 12, debouncedSearch],
-    queryFn: () => fetchNotes({ page, perPage: 12, search: debouncedSearch }),
+  queryKey: ["notes", page, PER_PAGE, debouncedSearch],
+queryFn: () => fetchNotes({ page, perPage: PER_PAGE, search: debouncedSearch }),
     placeholderData: keepPreviousData,
   });
 
@@ -38,8 +43,19 @@ const App: React.FC = () => {
     setPage(1);
   }, [debouncedSearch]);
 
+  useEffect(() => {
+    if (isError && error) {
+      if (error.message.includes('Access token is missing or empty')) {
+        toast.error(error.message);
+      } else if (error.message.includes("Failed to execute 'setRequestHeader'")) {
+        toast.error("Invalid token. Please check your settings or update the token.");
+      }
+    }
+  }, [isError, error]);
+
   return (
     <div className={css.app}>
+      <Toaster position="top-center" />
       <header className={css.toolbar}>
         <SearchBox value={search} onChange={setSearch} />
 
@@ -57,11 +73,12 @@ const App: React.FC = () => {
       </header>
 
       {isLoading && <p>Loading notes...</p>}
-      {isError && error && <p className={css.error}>{error.message}</p>}
-      {/* {!isLoading && !isError && data === null && (
-        <p className={css.error}>Некоректний або відсутній токен. Додавання, видалення та отримання нотаток недоступне.</p>
-      )}
-      {!isLoading && !isError && data && data.notes && data.notes.length === 0 && <p>No notes found</p>} */}
+      {isError && error &&
+        !error.message.includes('Access token is missing or empty') &&
+        !error.message.includes("Failed to execute 'setRequestHeader'") && (
+          <p className={css.error}>{error.message}</p>
+        )}
+      {!isLoading && !isError && data && data.notes && data.notes.length === 0 && <p>No notes found</p>} 
       {!isLoading && !isError && data && data.notes && data.notes.length > 0 && (
         <NoteList
           notes={data.notes}

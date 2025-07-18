@@ -10,6 +10,9 @@ interface ModalProps {
 const modalRoot = document.getElementById("modal-root");
 const Modal: React.FC<ModalProps> = ({ onClose, children }) => {
   useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onClose();
@@ -19,6 +22,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, children }) => {
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = originalOverflow;
     };
   }, [onClose]);
 

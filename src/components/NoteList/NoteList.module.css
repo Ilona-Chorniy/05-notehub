@@ -75,3 +75,10 @@
     text-overflow: ellipsis;
   }
   
+
+  .deleting {
+  opacity: 0.5;            
+  pointer-events: none;   
+  transition: opacity 0.3s ease;  
+  filter: grayscale(50%);  
+}

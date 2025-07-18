@@ -16,6 +16,7 @@
     "modern-normalize": "^3.0.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-hot-toast": "^2.5.2",
     "react-paginate": "^8.3.0",
     "use-debounce": "^10.0.5",
     "yup": "^1.6.1"
