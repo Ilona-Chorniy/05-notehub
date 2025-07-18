@@ -9,8 +9,7 @@ import Pagination from "../Pagination/Pagination";
 import SearchBox from "../SearchBox/SearchBox";
 import { fetchNotes } from "../../services/noteService";
 import type { FetchNotesResponse } from "../../services/noteService";
-import { Toaster } from "react-hot-toast";
-import toast from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 
 
 const PER_PAGE = 12;
