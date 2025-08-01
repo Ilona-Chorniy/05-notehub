@@ -12,6 +12,7 @@ import type { FetchNotesResponse } from "../../services/noteService";
 import { Toaster, toast } from "react-hot-toast";
 
 
+
 const PER_PAGE = 12;
 
 const App: React.FC = () => {

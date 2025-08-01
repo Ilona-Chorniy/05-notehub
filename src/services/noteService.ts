@@ -58,7 +58,7 @@ export async function createNote(data: CreateNoteData): Promise<Note> {
     return response.data;
 }
 
-export async function deleteNote(id: number): Promise<Note> {
+export async function deleteNote(id: string): Promise<Note> {
     checkToken();
     const response = await axios.delete<Note>(`${BASE_URL}/notes/${id}`, {
         headers: {
